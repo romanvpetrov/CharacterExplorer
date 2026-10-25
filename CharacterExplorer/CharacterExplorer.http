@@ -1,0 +1,6 @@
+@CharacterExplorer_HostAddress = http://localhost:5288
+
+GET {{CharacterExplorer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

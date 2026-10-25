@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="CharacterExplorer/CharacterExplorer.csproj" />
+  <Project Path="CharacterExplorer.Domain/CharacterExplorer.Domain.csproj" />
+  <Project Path="CharacterExplorer.Services/CharacterExplorer.Services.csproj" />
+  <Project Path="CharacterExplorer.Infrastructure/CharacterExplorer.Infrastructure.csproj" />
+  <Project Path="CharacterExplorer.Tests/CharacterExplorer.Tests.csproj" />
+</Solution>
