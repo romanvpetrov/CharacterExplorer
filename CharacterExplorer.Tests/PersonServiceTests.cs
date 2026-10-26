@@ -403,14 +403,14 @@ public sealed class PersonServiceTests
     {
         var person = new Person
         {
-            Id = 1, Name = "Complete", Height = "180", Mass = "80",
+            Id = 1, Name = "Complete", Height = new Height(180), Mass = new Mass(80),
             HairColor = "brown", SkinColor = "fair", EyeColor = "blue",
             BirthYear = "19BBY", Gender = "male"
         };
 
         var result = await CreatePersonService(people: PeopleRepo([person])).GetByIdAsync(1);
 
-        Assert.Equal(("Complete", "180", "80", "brown", "fair", "blue", "19BBY", "male"),
+        Assert.Equal(("Complete", "180 cm", "80 kg", "brown", "fair", "blue", "19BBY", "male"),
             (result.Person!.Name, result.Person.Height, result.Person.Mass,
                 result.Person.HairColor, result.Person.SkinColor, result.Person.EyeColor,
                 result.Person.BirthYear, result.Person.Gender));
@@ -421,7 +421,8 @@ public sealed class PersonServiceTests
     {
         var person = new Person
         {
-            Id = 1, Name = "Many", SpeciesId = 7, HomeworldId = 8,
+            Id = 1, Name = "Many", Height = new Height(180), Mass = new Mass(80),
+            SpeciesId = 7, HomeworldId = 8,
             FilmIds = [1, 2, 3], VehicleIds = [4, 5], StarshipIds = [6, 7]
         };
 
@@ -432,19 +433,19 @@ public sealed class PersonServiceTests
                 "Human",
                 "mammal",
                 "sentient",
-                "180",
-                "120",
+                new Height(180),
+                new Years(120),
                 "Basic")),
             homeworlds: WorldRepo(new Homeworld(
                 8,
                 "Earth",
-                "8b",
+                2000000,
                 "temperate",
                 "mild",
-                "70",
-                "1",
-                "24",
-                "365",
+                new Percentage(70),
+                new Distance(1),
+                new Days(24),
+                new Days(365),
                 "1")),
             films: new InMemoryFilmRepository([
                 new(
@@ -496,7 +497,8 @@ public sealed class PersonServiceTests
     {
         var person = new Person
         {
-            Id = 1, Name = "Tracked", SpeciesId = 7, HomeworldId = 8,
+            Id = 1, Name = "Tracked", Height = new Height(180), Mass = new Mass(80),
+            SpeciesId = 7, HomeworldId = 8,
             FilmIds = [1, 2], VehicleIds = [3], StarshipIds = [4]
         };
 
@@ -507,19 +509,19 @@ public sealed class PersonServiceTests
                 "Human",
                 "mammal",
                 "sentient",
-                "180",
-                "120",
+                new Height(180),
+                new Years(120),
                 "Basic")),
             homeworlds: WorldRepo(new Homeworld(
                 8,
                 "Earth",
-                "8b",
+                2000000,
                 "temperate",
                 "mild",
-                "70",
-                "1",
-                "24",
-                "365",
+                new Percentage(70),
+                new Distance(1),
+                new Days(24),
+                new Days(365),
                 "1")),
             films: new InMemoryFilmRepository([
                 new(
@@ -551,8 +553,17 @@ public sealed class PersonServiceTests
                 "1")])
         ).GetByIdAsync(1);
 
-        Assert.Equal("Human", result.Person!.Species!.Name);
+        Assert.Equal("180 cm", result.Person!.Height);
+        Assert.Equal("80 kg", result.Person.Mass);
+        Assert.Equal("Human", result.Person.Species!.Name);
+        Assert.Equal("180 cm", result.Person.Species.AverageHeight);
+        Assert.Equal("120 years", result.Person.Species.AverageLifespan);
         Assert.Equal("Earth", result.Person.Homeworld!.Name);
+        Assert.Equal("2,000,000", result.Person.Homeworld.Population);
+        Assert.Equal("70%", result.Person.Homeworld.SurfaceWater);
+        Assert.Equal("1 km", result.Person.Homeworld.Diameter);
+        Assert.Equal("24 days", result.Person.Homeworld.RotationPeriod);
+        Assert.Equal("365 days", result.Person.Homeworld.OrbitalPeriod);
         Assert.Equal([1, 2], result.Person.Films.Select(film => film.Id));
         Assert.Equal([3], result.Person.Vehicles.Select(vehicle => vehicle.Id));
         Assert.Equal([4], result.Person.Starships.Select(starship => starship.Id));

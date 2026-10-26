@@ -25,13 +25,13 @@ public sealed class SwapiHomeworldRepository(SwapiClient client) : IHomeworldRep
         return world is null ? null : new Homeworld(
             id,
             world.Name,
-            world.Population,
+            MeasurementParser.Population(world.Population),
             world.Terrain,
             world.Climate,
-            world.SurfaceWater,
-            world.Diameter,
-            world.RotationPeriod,
-            world.OrbitalPeriod,
+            MeasurementParser.Percentage(world.SurfaceWater),
+            MeasurementParser.Distance(world.Diameter),
+            MeasurementParser.Days(world.RotationPeriod),
+            MeasurementParser.Days(world.OrbitalPeriod),
             world.Gravity);
     }
 }

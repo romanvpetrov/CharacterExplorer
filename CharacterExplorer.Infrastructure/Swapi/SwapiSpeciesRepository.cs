@@ -24,8 +24,8 @@ public sealed class SwapiSpeciesRepository(SwapiClient client) : ISpeciesReposit
             species.Name,
             species.Classification,
             species.Designation,
-            species.AverageHeight,
-            species.AverageLifespan,
+            MeasurementParser.Height(species.AverageHeight),
+            MeasurementParser.Years(species.AverageLifespan),
             species.Language);
     }
 }

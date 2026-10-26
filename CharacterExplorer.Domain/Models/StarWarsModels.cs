@@ -6,8 +6,8 @@ public sealed class Person
 {
     public required int Id { get; init; }
     public required string Name { get; init; }
-    public string Height { get; init; } = "unknown";
-    public string Mass { get; init; } = "unknown";
+    public Height? Height { get; init; }
+    public Mass? Mass { get; init; }
     public string HairColor { get; init; } = "unknown";
     public string SkinColor { get; init; } = "unknown";
     public string EyeColor { get; init; } = "unknown";
@@ -30,21 +30,21 @@ public sealed record Species(
     string Name,
     string Classification,
     string Designation,
-    string AverageHeight,
-    string AverageLifespan,
+    Height? AverageHeight,
+    Years? AverageLifespan,
     string Language
 );
 
 public sealed record Homeworld(
     int Id,
     string Name,
-    string Population,
+    long? Population,
     string Terrain,
     string Climate,
-    string SurfaceWater,
-    string Diameter,
-    string RotationPeriod,
-    string OrbitalPeriod,
+    Percentage? SurfaceWater,
+    Distance? Diameter,
+    Days? RotationPeriod,
+    Days? OrbitalPeriod,
     string Gravity
 );
 

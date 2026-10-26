@@ -39,7 +39,8 @@ public sealed class SwapiPersonRepository(SwapiClient client) : IPersonRepositor
         if (p is null) return null;
         return new Person
         {
-            Id = SwapiLink.Id(p.Url) ?? id, Name = p.Name, Height = p.Height, Mass = p.Mass,
+            Id = SwapiLink.Id(p.Url) ?? id, Name = p.Name,
+            Height = MeasurementParser.Height(p.Height), Mass = MeasurementParser.Mass(p.Mass),
             HairColor = p.HairColor, SkinColor = p.SkinColor, EyeColor = p.EyeColor,
             BirthYear = p.BirthYear, Gender = p.Gender, HomeworldId = SwapiLink.Id(p.Homeworld),
             SpeciesId = p.Species.Select(SwapiLink.Id).FirstOrDefault(x => x.HasValue),

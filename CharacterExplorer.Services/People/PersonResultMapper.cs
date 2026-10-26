@@ -1,3 +1,4 @@
+using System.Globalization;
 using CharacterExplorer.Domain.Models;
 
 namespace CharacterExplorer.Services.People;
@@ -15,8 +16,8 @@ internal static class PersonResultMapper
     ) => GetPersonResult.Succeeded(new PersonDetailsResult(
         person.Id,
         person.Name,
-        person.Height,
-        person.Mass,
+        Format(person.Height),
+        Format(person.Mass),
         person.HairColor,
         person.SkinColor,
         person.EyeColor,
@@ -34,21 +35,21 @@ internal static class PersonResultMapper
             value.Name,
             value.Classification,
             value.Designation,
-            value.AverageHeight,
-            value.AverageLifespan,
+            Format(value.AverageHeight),
+            Format(value.AverageLifespan),
             value.Language);
 
     private static HomeworldResult? ToResult(Homeworld? value) => value is null
         ? null
         : new(
             value.Name,
-            value.Population,
+            value.Population?.ToString("N0", CultureInfo.InvariantCulture) ?? "unknown",
             value.Terrain,
             value.Climate,
-            value.SurfaceWater,
-            value.Diameter,
-            value.RotationPeriod,
-            value.OrbitalPeriod,
+            Format(value.SurfaceWater),
+            Format(value.Diameter),
+            Format(value.RotationPeriod),
+            Format(value.OrbitalPeriod),
             value.Gravity);
 
     private static FilmResult ToResult(Film value, bool appears) =>
@@ -78,4 +79,7 @@ internal static class PersonResultMapper
             value.Manufacturer,
             value.Crew,
             value.Passengers);
+
+    private static string Format<T>(T? value) where T : struct =>
+        value?.ToString() ?? "unknown";
 }
