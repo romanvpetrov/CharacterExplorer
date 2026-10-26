@@ -4,8 +4,9 @@ namespace CharacterExplorer.Infrastructure.Swapi;
 
 public sealed class SwapiClient(HttpClient http)
 {
-    public Task<T?> GetAsync<T>(string path)
+    public async Task<T?> GetAsync<T>(string path)
     {
-        return http.GetFromJsonAsync<T>(path);
+        var raw = await http.GetStringAsync(path);
+        return await http.GetFromJsonAsync<T>(path);
     }
 }

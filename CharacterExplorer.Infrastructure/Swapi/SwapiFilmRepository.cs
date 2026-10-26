@@ -17,7 +17,7 @@ public sealed class SwapiFilmRepository(SwapiClient client) : IFilmRepository
     public async Task<IEnumerable<Film>> GetAllAsync()
     {
         var films = await client.GetAsync<IEnumerable<FilmJson>>($"films");
-        return films.Select(film => new Film(SwapiLink.Id(film.Url) ?? 0, film.ReleaseDate, film.EpisodeId, film.ReleaseDate));
+        return films.Select(film => new Film(SwapiLink.Id(film.Url) ?? 0, film.Title, film.EpisodeId, film.ReleaseDate));
     }
 
     public async Task<Film?> GetByIdAsync(int id)

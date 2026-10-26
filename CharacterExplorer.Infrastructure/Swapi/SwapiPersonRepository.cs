@@ -1,6 +1,7 @@
-using System.Text.Json.Serialization;
 using CharacterExplorer.Domain.Models;
 using CharacterExplorer.Domain.Repositories;
+using System.Text.Json.Serialization;
+using static System.Net.WebRequestMethods;
 
 namespace CharacterExplorer.Infrastructure.Swapi;
 
