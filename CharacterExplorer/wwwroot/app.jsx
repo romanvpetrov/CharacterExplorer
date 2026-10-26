@@ -18,12 +18,22 @@ function Fact({ label, value }) {
   );
 }
 
+function LoadingState({ label }) {
+  return (
+    <div className="state loading-state" role="status" aria-live="polite">
+      <span className="spinner" aria-hidden="true" />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 function App() {
   const [people, setPeople] = useState([]);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(null);
   const [person, setPerson] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [peopleLoading, setPeopleLoading] = useState(true);
+  const [personLoading, setPersonLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -36,7 +46,7 @@ function App() {
         setSelected(data[0]?.id);
       })
       .catch(() => setError("Unable to load the character index."))
-      .finally(() => setLoading(false));
+      .finally(() => setPeopleLoading(false));
   }, []);
 
   useEffect(() => {
@@ -44,14 +54,27 @@ function App() {
       return;
     }
 
+    const controller = new AbortController();
     setPerson(null);
+    setPersonLoading(true);
 
-    fetch("/api/people/" + selected)
+    fetch("/api/people/" + selected, { signal: controller.signal })
       .then((response) =>
         response.ok ? response.json() : Promise.reject()
       )
       .then(setPerson)
-      .catch(() => setError("Unable to retrieve this character."));
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setError("Unable to retrieve this character.");
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setPersonLoading(false);
+        }
+      });
+
+    return () => controller.abort();
   }, [selected]);
 
   const filtered = useMemo(
@@ -84,8 +107,8 @@ function App() {
         <aside className="side">
           <h3 className="eyebrow">Characters // {filtered.length}</h3>
           <div className="side-list">
-            {loading ? (
-              <div className="state">INDEXING...</div>
+            {peopleLoading ? (
+              <LoadingState label="INDEXING..." />
             ) : filtered.length === 0 ? (
               <div className="state">NO MATCHES</div>
             ) : (
@@ -106,12 +129,12 @@ function App() {
         </aside>
 
         <section className="main">
-          {error && !person ? (
+          {error && !person && !personLoading ? (
             <div className="state error">{error}</div>
+          ) : peopleLoading || personLoading ? (
+            <LoadingState label="LOADING DATAPAD..." />
           ) : !person ? (
-            <div className="state">
-              {loading ? "LOADING DATAPAD..." : "SELECT A CHARACTER"}
-            </div>
+            <div className="state">SELECT A CHARACTER</div>
           ) : (
             <>
               <div className="card">
