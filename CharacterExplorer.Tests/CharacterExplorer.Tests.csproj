@@ -13,5 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CharacterExplorer.Domain\CharacterExplorer.Domain.csproj" />
     <ProjectReference Include="..\CharacterExplorer.Services\CharacterExplorer.Services.csproj" />
+    <ProjectReference Include="..\CharacterExplorer.Infrastructure\CharacterExplorer.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

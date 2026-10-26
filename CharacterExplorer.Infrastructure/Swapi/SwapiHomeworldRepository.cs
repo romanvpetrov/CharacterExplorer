@@ -22,7 +22,16 @@ public sealed class SwapiHomeworldRepository(SwapiClient client) : IHomeworldRep
     public async Task<Homeworld?> GetByIdAsync(int id)
     {
         var world = await client.GetAsync<WorldJson>($"planets/{id}");
-        return world is null ? null : new(world.Name, world.Population, world.Terrain, world.Climate,
-            world.SurfaceWater, world.Diameter, world.RotationPeriod, world.OrbitalPeriod, world.Gravity);
+        return world is null ? null : new Homeworld(
+            id,
+            world.Name,
+            world.Population,
+            world.Terrain,
+            world.Climate,
+            world.SurfaceWater,
+            world.Diameter,
+            world.RotationPeriod,
+            world.OrbitalPeriod,
+            world.Gravity);
     }
 }

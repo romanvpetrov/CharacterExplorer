@@ -10,7 +10,8 @@ internal static class PersonResultMapper
         new(person.Id, person.Name);
 
     public static GetPersonResult ToGetResult(
-        Person person
+        Person person,
+        IEnumerable<Film> allFilms
     ) => GetPersonResult.Succeeded(new PersonDetailsResult(
         person.Id,
         person.Name,
@@ -23,7 +24,7 @@ internal static class PersonResultMapper
         person.Gender,
         ToResult(person.Species),
         ToResult(person.Homeworld),
-        person.Films.Select(ToResult).ToArray(),
+        allFilms.Select(film => ToResult(film, person.FilmIds.Contains(film.Id))).ToArray(),
         person.Vehicles.Select(ToResult).ToArray(),
         person.Starships.Select(ToResult).ToArray()));
 
@@ -50,13 +51,13 @@ internal static class PersonResultMapper
             value.OrbitalPeriod,
             value.Gravity);
 
-    private static FilmResult ToResult(Film value) =>
+    private static FilmResult ToResult(Film value, bool appears) =>
         new(
             value.Id,
             value.Title,
             value.EpisodeId,
             value.ReleaseDate,
-            value.Appears);
+            appears);
 
     private static VehicleResult ToResult(Vehicle value) =>
         new(

@@ -26,6 +26,7 @@ public sealed class Person
 }
 
 public sealed record Species(
+    int Id,
     string Name,
     string Classification,
     string Designation,
@@ -35,6 +36,7 @@ public sealed record Species(
 );
 
 public sealed record Homeworld(
+    int Id,
     string Name,
     string Population,
     string Terrain,
@@ -46,7 +48,7 @@ public sealed record Homeworld(
     string Gravity
 );
 
-public sealed record Film(int Id, string Title, int EpisodeId, string ReleaseDate, bool Appears);
+public sealed record Film(int Id, string Title, int EpisodeId, string ReleaseDate);
 
 public sealed record Vehicle(
     int Id,

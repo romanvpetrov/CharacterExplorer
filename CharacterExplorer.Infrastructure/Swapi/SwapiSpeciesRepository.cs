@@ -19,7 +19,13 @@ public sealed class SwapiSpeciesRepository(SwapiClient client) : ISpeciesReposit
     public async Task<Species?> GetByIdAsync(int id)
     {
         var species = await client.GetAsync<SpeciesJson>($"species/{id}");
-        return species is null ? null : new(species.Name, species.Classification, species.Designation,
-            species.AverageHeight, species.AverageLifespan, species.Language);
+        return species is null ? null : new Species(
+            id,
+            species.Name,
+            species.Classification,
+            species.Designation,
+            species.AverageHeight,
+            species.AverageLifespan,
+            species.Language);
     }
 }

@@ -45,9 +45,7 @@ public sealed class PersonService(
         }
     }
 
-    public async Task<GetPersonResult> GetByIdAsync(
-        int id
-    )
+    public async Task<GetPersonResult> GetByIdAsync(int id)
     {
         try
         {
@@ -64,7 +62,7 @@ public sealed class PersonService(
                 ? homeworldRepository.GetByIdAsync(homeworldId)
                 : Task.FromResult<Homeworld?>(null);
 
-            var filmTasks = person.FilmIds.Select(f => filmsRepository.GetByIdAsync(f));
+            var allFilms = await filmsRepository.GetAllAsync();
 
             var vehicleTasks = person.VehicleIds.Select(v =>
                 vehiclesRepository.GetByIdAsync(v)
@@ -77,17 +75,15 @@ public sealed class PersonService(
             var species = await speciesTask;
             var homeworld = await homeworldTask;
 
-            var films = await Task.WhenAll(filmTasks);
             var vehicles = await Task.WhenAll(vehicleTasks);
             var starships = await Task.WhenAll(starshipTasks);
 
             person.Species = species;
             person.Homeworld = homeworld;
-            person.Films = films.OfType<Film>().ToArray();
             person.Vehicles = vehicles.OfType<Vehicle>().ToArray();
             person.Starships = starships.OfType<Starship>().ToArray();
 
-            return PersonResultMapper.ToGetResult(person);
+            return PersonResultMapper.ToGetResult(person, allFilms);
         }
         catch (Exception)
         {
