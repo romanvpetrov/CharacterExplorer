@@ -1,5 +1,7 @@
 # Character Explorer
 
+[**Live Demo — Try Character Explorer →**](https://characterexplorer-f0e4bxh4hqb0e7hp.westus2-01.azurewebsites.net/)
+
 Character Explorer is built using Onion Architecture and Domain-Driven Design (DDD). The project separates the domain, application services, infrastructure, and presentation concerns so that each part can evolve independently.
 
 ## Architecture
